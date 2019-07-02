@@ -1,0 +1,26 @@
+#+ endpoint: http://purl.org/github2prov
+
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX github2prov: <http://purl.org/github2prov/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX or: <http://openresearch.org/vocab/>
+PREFIX pr: <http://purl.org/ontology/prv/core#>
+PREFIX pro: <http://purl.org/hpi/patchr#>
+
+SELECT ?ca ?i ?v ?st ?d ?status
+
+WHERE {
+GRAPH <https://github.com/repos/libvips/libvips> {
+?i a github2prov:issue.
+?i prov:wasGeneratedBy ?ca.
+?ca prov:wasAssociatedWith ?d .
+?v a github2prov:issue_version.
+?v prov:specializationOf ?i .
+?ca prov:startedAtTime ?st.
+?v prov:wasGeneratedBy ?a.
+?a rdf:type ?status.
+FILTER (( ?st >= "2019-01-01T00:00:00+00:00"^^xsd:dateTime) &&
+( ?st < "2019-02-01T00:00:00+00:00"^^xsd:dateTime))
+}
+}
